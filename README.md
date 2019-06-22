@@ -15,6 +15,6 @@
 
 Поднимите виртуальную машину командой `vagrant up --provision`
 - Зайдите в ВМ `vagrant ssh`, перейдите в папку `~/code`
-- Соберите приложение командой `phing -f ./build/dev/build.xml`
+- Соберите приложение командой `php vendor/phing/phing/bin/phing -f ./build/dev/build.xml`
 
 - Заходите на http://dev.log.local/

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Test" default="build" basedir=".">
+
+    <target name="build" depends="vars, copy, configs, composer, switch, migrate"/>
+
+    <!-- ============================================  -->
+    <!-- Target: vars                                  -->
+    <!-- ============================================  -->
+    <target name="vars">
+
+        <resolvepath propertyName="project.dir" file="${project.basedir}" />
+        <echo msg="Project source dir is: ${project.dir}" />
+
+        <resolvepath propertyName="home.dir" file="${project.dir}/.." />
+        <echo msg="Home dir is: ${home.dir}" />
+
+        <php returnProperty="build.time" function="date">
+            <param value="Y-m-d-H-i-s" />
+        </php>
+
+        <property name="domain" value="prod.php.course" />
+        <echo msg="Project public domain is: ${domain}" />
+
+        <resolvepath propertyName="current.dir" file="${home.dir}/${build.time}" />
+        <echo msg="Current build dir is: ${current.dir}" />
+
+    </target>
+
+    <!-- ============================================  -->
+    <!-- Target: copy                                  -->
+    <!-- ============================================  -->
+    <target name="copy">
+
+        <mkdir dir="${current.dir}" />
+        <echo msg="Current dir ${current.dir} is made" />
+
+        <copy todir="${current.dir}">
+            <fileset dir="${project.dir}" defaultexcludes="true">
+                <include name="**" />
+                <exclude name="vendor/**"/>
+            </fileset>
+        </copy>
+
+    </target>
+
+    <!-- ============================================  -->
+    <!-- Target: configs                               -->
+    <!-- ============================================  -->
+    <target name="configs">
+        <echo msg="Сonfigs create:" />
+        <copy todir="${current.dir}" overwrite="true" haltonerror="true">
+            <fileset dir="${current.dir}/build/pro/config">
+                <include name="**" />
+            </fileset>
+            <filterchain>
+                <replacetokens begintoken="{{" endtoken="}}">
+                    <token key="domain" value="$domain" />
+                    <token key="db.username" value="${db.username}" />
+                    <token key="db.password" value="${db.password}" />
+                </replacetokens>
+            </filterchain>
+        </copy>
+    </target>
+
+    <!-- ============================================  -->
+    <!-- Target: composer                              -->
+    <!-- ============================================  -->
+    <target name="composer">
+        <echo msg="Composer dependencies install:" />
+        <exec command="composer install" dir="${current.dir}" passthru="true" checkreturn="true" />
+    </target>
+
+    <!-- ============================================  -->
+    <!-- Target: switch                                -->
+    <!-- ============================================  -->
+    <target name="switch">
+        <symlink target="${current.dir}" link="${home.dir}/current" overwrite="true" />
+    </target>
+
+    <!-- ============================================  -->
+    <!-- Target: migrate                               -->
+    <!-- ============================================  -->
+    <target name="migrate">
+        <echo msg="Db migrating:" />
+        <exec command="php artisan migrate &#45;&#45;database=default" dir="${current.dir}" passthru="true" checkreturn="true" />
+    </target>
+</project>

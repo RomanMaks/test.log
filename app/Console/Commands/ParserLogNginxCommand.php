@@ -5,7 +5,11 @@ namespace App\Console\Commands;
 use App\Facades\ParserLogNginxFacade;
 use Illuminate\Console\Command;
 
-class ParserLogNginx extends Command
+/**
+ * Class ParserLogNginxCommand
+ * @package App\Console\Commands
+ */
+class ParserLogNginxCommand extends Command
 {
     /**
      * The name and signature of the console command.

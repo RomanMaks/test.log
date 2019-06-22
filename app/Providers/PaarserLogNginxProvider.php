@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Console\Commands\ParserLogNginx;
+use App\Services\ParserLogNginxService;
 use Illuminate\Support\ServiceProvider;
 
 class PaarserLogNginxProvider extends ServiceProvider
@@ -24,6 +24,6 @@ class PaarserLogNginxProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->singleton('parser', ParserLogNginx::class);
+        $this->app->singleton('parser', ParserLogNginxService::class);
     }
 }

@@ -178,7 +178,7 @@ return [
         /*
          * Custom Service Providers...
          */
-        \App\Providers\PaarserLogNginxProvider::class,
+        App\Providers\PaarserLogNginxProvider::class,
 
     ],
 

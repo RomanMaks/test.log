@@ -21,6 +21,8 @@ class Log extends Model
 {
     protected $table = 'logs';
 
+    public $timestamps = false;
+
     /**
      * Атрибуты которые можно присвоить массово
      *

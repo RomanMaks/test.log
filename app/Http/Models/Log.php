@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @package App\Http\Models
  *
  * @property integer $id
- * @property string $ip
+ * @property integer $ip
  * @property Carbon $date
  * @property string|null $url
  * @property string $os

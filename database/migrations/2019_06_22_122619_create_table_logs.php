@@ -15,12 +15,13 @@ class CreateTableLogs extends Migration
     {
         Schema::create('logs', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('ip')->nullable(false);
+            $table->bigInteger('ip')->nullable(false);
             $table->timestamp('date')->nullable(false);
             $table->text('url')->nullable();
             $table->string('os', 20)->nullable();
             $table->string('architecture', 3)->nullable();
             $table->string('browser')->nullable();
+            $table->index(['ip'], 'idx_logs_ip');
         });
     }
 

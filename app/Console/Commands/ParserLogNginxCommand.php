@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Http\Models\Log;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use UAParser\Parser;
 
 /**
@@ -14,6 +15,8 @@ use UAParser\Parser;
 class ParserLogNginxCommand extends Command
 {
     const FILE = __DIR__ . '/../../../modimio.access.log';
+
+    const INSERT_LIMIT = 100000;
 
     protected $parser;
 
@@ -58,27 +61,37 @@ class ParserLogNginxCommand extends Command
             return;
         }
 
+        $insertLimit = 0;
+        $log = [];
+
         while (!feof($file)) {
             $line = fgets($file);
 
-            $log = new Log();
+            if (self::INSERT_LIMIT === $insertLimit) {
+                Log::insert($log);
+                $insertLimit = 0;
+                $log = [];
+            }
 
             preg_match('/([0-9]{1,3}[\.]){3}[0-9]{1,3}/u', $line, $matches);
-            $log->ip = $matches[0];
+            if (empty($matches[0])) {
+                continue;
+            }
+
+            $log[$insertLimit]['ip'] = ip2long($matches[0]);
 
             preg_match('/([0-9]{2}\/[a-zA-Z]{3}\/[0-9]{4}):(([0-9]{2}:){2}[0-9]{2})/u', $line, $matches);
-            $log->date = Carbon::createFromTimeString(str_replace('/', '-', $matches[1] . 'T' . $matches[2]));
+            $log[$insertLimit]['date'] = Carbon::createFromTimeString(str_replace('/', '-', $matches[1] . 'T' . $matches[2]));
 
             preg_match('/"((http|https):\/\/[^\s]+)"/u', $line, $matches);
-            $log->url = $matches[0] ?? null;
+            $log[$insertLimit]['url'] = $matches[0] ?? null;
 
             $userAgent = $this->parser->parse($line);
 
-            $log->os = $userAgent->os->family;
-            $log->browser = $userAgent->ua->family;
+            $log[$insertLimit]['os'] = $userAgent->os->family;
+            $log[$insertLimit]['browser'] = $userAgent->ua->family;
 
-            //TODO Нужно оптимизировать сохранение в один запрос
-            $log->save();
+            $insertLimit++;
         }
 
         fclose($file);

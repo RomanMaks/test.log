@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\Http\Models\Log;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 use UAParser\Parser;
 
 /**
@@ -16,7 +15,7 @@ class ParserLogNginxCommand extends Command
 {
     const FILE = __DIR__ . '/../../../modimio.access.log';
 
-    const INSERT_LIMIT = 100000;
+    const INSERT_LIMIT = 1000;
 
     protected $parser;
 
@@ -62,15 +61,15 @@ class ParserLogNginxCommand extends Command
         }
 
         $insertLimit = 0;
-        $log = [];
+        $logs = [];
 
         while (!feof($file)) {
             $line = fgets($file);
 
             if (self::INSERT_LIMIT === $insertLimit) {
-                Log::insert($log);
+                Log::insert($logs);
                 $insertLimit = 0;
-                $log = [];
+                $logs = [];
             }
 
             preg_match('/([0-9]{1,3}[\.]){3}[0-9]{1,3}/u', $line, $matches);
@@ -78,20 +77,32 @@ class ParserLogNginxCommand extends Command
                 continue;
             }
 
-            $log[$insertLimit]['ip'] = ip2long($matches[0]);
+            $logs[$insertLimit]['ip'] = ip2long($matches[0]);
 
             preg_match('/([0-9]{2}\/[a-zA-Z]{3}\/[0-9]{4}):(([0-9]{2}:){2}[0-9]{2})/u', $line, $matches);
-            $log[$insertLimit]['date'] = Carbon::createFromTimeString(str_replace('/', '-', $matches[1] . 'T' . $matches[2]));
+            $logs[$insertLimit]['date'] = Carbon::createFromTimeString(str_replace('/', '-', $matches[1] . 'T' . $matches[2]));
 
             preg_match('/"((http|https):\/\/[^\s]+)"/u', $line, $matches);
-            $log[$insertLimit]['url'] = $matches[0] ?? null;
+            $logs[$insertLimit]['url'] = $matches[0] ?? null;
 
             $userAgent = $this->parser->parse($line);
 
-            $log[$insertLimit]['os'] = $userAgent->os->family;
-            $log[$insertLimit]['browser'] = $userAgent->ua->family;
+            if (preg_match('/(Win64; x64;|WOW64;|x86_64;)/u', $line)) {
+                $logs[$insertLimit]['architecture'] = 'x64';
+            } elseif (preg_match('/i686;/u', $line)) {
+                $logs[$insertLimit]['architecture'] = 'x86';
+            } else {
+                $logs[$insertLimit]['architecture'] = null;
+            }
+
+            $logs[$insertLimit]['os'] = $userAgent->os->family;
+            $logs[$insertLimit]['browser'] = $userAgent->ua->family;
 
             $insertLimit++;
+        }
+
+        if (!empty($insertLimit)) {
+            Log::insert($logs);
         }
 
         fclose($file);

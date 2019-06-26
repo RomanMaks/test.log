@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Models\Log;
 
 /**
  * Контроллер по работа с приборной доской
@@ -14,6 +14,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return view('dashboard');
+        $logs = Log::paginate(10);
+        return view('dashboard', compact('logs'));
     }
 }

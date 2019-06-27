@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Models\Log;
+use App\Http\Requests\DashboardRequest;
 
 /**
  * Контроллер по работа с приборной доской
@@ -12,9 +13,11 @@ use App\Http\Models\Log;
  */
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(DashboardRequest $request)
     {
-        $logs = Log::paginate(10);
+        $logs = Log::filter($request->all())
+            ->paginateFilter(10);
+
         return view('dashboard', compact('logs'));
     }
 }

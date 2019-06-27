@@ -9,19 +9,19 @@
             <div class="form-row">
                 <div class="form-group col-md-2">
                     <label for="date">Дата</label>
-                    <input type="text" class="form-control" name="date" id="date" value="{{ old('date') }}">
+                    <input type="date" class="form-control" name="date" id="date" value="{{ request('date') }}">
                 </div>
                 <div class="form-group col-md-2">
-                    <label for="request">Число запросов</label>
-                    <input type="text" class="form-control" name="request" id="request" value="{{ old('request') }}">
+                    <label for="os">ОС</label>
+                    <input type="text" class="form-control" name="os" id="os" value="{{ request('os') }}">
                 </div>
                 <div class="form-group col-md-2">
-                    <label for="url">Url</label>
-                    <input type="text" class="form-control" name="url" id="url" value="{{ old('url') }}">
-                </div>
-                <div class="form-group col-md-2">
-                    <label for="browser">Браузер</label>
-                    <input type="text" class="form-control" name="browser" id="browser" value="{{ old('browser') }}">
+                    <label for="architecture">Архитектура</label>
+                    <select class="form-control select2-container" id="architecture" name="architecture">
+                        <option></option>
+                        <option value="x86" {{ request('architecture') === 'x86' ? 'selected' : ''  }}>x86</option>
+                        <option value="x64" {{ request('architecture') === 'x64' ? 'selected' : ''  }}>x64</option>
+                    </select>
                 </div>
             </div>
             <div class="col-sm-5">

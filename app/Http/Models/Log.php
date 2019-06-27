@@ -2,7 +2,9 @@
 
 namespace App\Http\Models;
 
+use App\ModelFilters\LogFilter;
 use Carbon\Carbon;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -19,6 +21,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Log extends Model
 {
+    use Filterable;
+
     protected $table = 'logs';
 
     public $timestamps = false;
@@ -36,4 +40,12 @@ class Log extends Model
         'architecture',
         'browser'
     ];
+
+    /**
+     * @return string
+     */
+    public function modelFilter()
+    {
+        return $this->provideFilter(LogFilter::class);
+    }
 }

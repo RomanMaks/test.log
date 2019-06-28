@@ -80,7 +80,7 @@ class ParserLogNginxCommand extends Command
             $logs[$insertLimit]['ip'] = ip2long($matches[0]);
 
             preg_match('/([0-9]{2}\/[a-zA-Z]{3}\/[0-9]{4}):(([0-9]{2}:){2}[0-9]{2})/u', $line, $matches);
-            $logs[$insertLimit]['date'] = Carbon::createFromTimeString(str_replace('/', '-', $matches[1] . 'T' . $matches[2]));
+            $logs[$insertLimit]['requested_at'] = Carbon::createFromTimeString(str_replace('/', '-', $matches[1] . 'T' . $matches[2]));
 
             preg_match('/"((http|https):\/\/[^\s]+)"/u', $line, $matches);
             $logs[$insertLimit]['url'] = $matches[0] ?? null;

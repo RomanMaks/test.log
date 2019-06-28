@@ -6,6 +6,9 @@ use App\ModelFilters\LogFilter;
 use Carbon\Carbon;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder AS QueryBuilder;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class Log
@@ -13,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property integer $id
  * @property integer $ip
- * @property Carbon $date
+ * @property Carbon $requested_at
  * @property string|null $url
  * @property string $os
  * @property string|null $architecture
@@ -34,7 +37,7 @@ class Log extends Model
      */
     protected $fillable = [
         'ip',
-        'date',
+        'requested_at',
         'url',
         'os',
         'architecture',
@@ -47,5 +50,29 @@ class Log extends Model
     public function modelFilter()
     {
         return $this->provideFilter(LogFilter::class);
+    }
+
+    /**
+     * Самый популярный запрос
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopePopular(Builder $query): Builder
+    {
+        return $query
+            ->fromSub(function (QueryBuilder $query) {
+                return $query->from($this->table)
+                    ->select([
+                        DB::raw('DATE(`requested_at`) AS date'),
+                        DB::raw('COUNT(*) AS count'),
+                        'url',
+                        'browser',
+                        'os',
+                        'architecture'
+                    ])
+                    ->groupBy(['date', 'url', 'browser', 'os', 'architecture'])
+                    ->orderByDesc('count');
+            }, 'popular');
     }
 }

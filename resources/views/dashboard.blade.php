@@ -35,7 +35,7 @@
             @if($logs->isNotEmpty())
                 <thead>
                 <tr>
-                    <th>Дата</th>
+                    <th>Дата запроса</th>
                     <td>Число запросов</td>
                     <th>Url</th>
                     <th>Браузер</th>
@@ -46,7 +46,7 @@
                 @foreach($logs as $log)
                     <tr>
                         <td>{{ $log->date }}</td>
-                        <td>{{ rand(1, 100) }}</td>
+                        <td>{{ $log->count }}</td>
                         <td>{{ $log->url }}</td>
                         <td>{{ $log->browser }}</td>
                     </tr>

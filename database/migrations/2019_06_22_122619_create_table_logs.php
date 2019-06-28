@@ -16,7 +16,7 @@ class CreateTableLogs extends Migration
         Schema::create('logs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('ip')->nullable(false);
-            $table->timestamp('date')->nullable(false);
+            $table->timestamp('requested_at')->nullable(false);
             $table->text('url')->nullable();
             $table->string('os', 20)->nullable();
             $table->string('architecture', 3)->nullable();

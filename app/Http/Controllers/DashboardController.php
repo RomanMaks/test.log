@@ -16,6 +16,7 @@ class DashboardController extends Controller
     public function index(DashboardRequest $request)
     {
         $logs = Log::filter($request->all())
+            ->popular()
             ->paginateFilter(10);
 
         return view('dashboard', compact('logs'));

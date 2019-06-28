@@ -14,7 +14,7 @@ class DashboardRequest extends FormRequest
     public function rules()
     {
         return [
-            'date' => ['nullable', 'date'],
+            'requested_at' => ['nullable', 'date'],
             'os' => ['nullable', 'string'],
             'architecture' => ['nullable', 'string']
         ];

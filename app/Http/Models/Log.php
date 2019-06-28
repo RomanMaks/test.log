@@ -53,6 +53,19 @@ class Log extends Model
     }
 
     /**
+     * Доступные ОС
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeAvailableOs(Builder $query): Builder
+    {
+        return $query
+            ->select('os')
+            ->distinct();
+    }
+
+    /**
      * Самый популярный запрос
      *
      * @param Builder $query

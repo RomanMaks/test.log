@@ -33,7 +33,7 @@ class LogFilter extends ModelFilter
      */
     public function os($os): LogFilter
     {
-        return $this->where('os', 'LIKE', '%' . $os . '%');
+        return $this->where('os', '=', $os);
     }
 
     /**

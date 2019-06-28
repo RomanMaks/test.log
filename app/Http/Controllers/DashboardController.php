@@ -19,6 +19,8 @@ class DashboardController extends Controller
             ->popular()
             ->paginateFilter(10);
 
-        return view('dashboard', compact('logs'));
+        $os = Log::availableOs()->pluck('os');
+
+        return view('dashboard', compact('logs', 'os'));
     }
 }

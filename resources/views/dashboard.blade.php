@@ -13,7 +13,14 @@
                 </div>
                 <div class="form-group col-md-2">
                     <label for="os">ОС</label>
-                    <input type="text" class="form-control" name="os" id="os" value="{{ request('os') }}">
+                    <select class="form-control select2-container" id="os" name="os">
+                        <option></option>
+                        @foreach($os as $item)
+                            <option value="{{ $item }}" {{ request('os') === $item ? 'selected' : ''  }}>{{ $item }}</option>
+                        @endforeach
+                    </select>
+
+                    {{--<input type="text" class="form-control" name="os" id="os" value="{{ request('os') }}">--}}
                 </div>
                 <div class="form-group col-md-2">
                     <label for="architecture">Архитектура</label>

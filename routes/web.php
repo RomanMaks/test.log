@@ -11,4 +11,4 @@
 |
 */
 
-Route::get('/', 'DashboardController@index')->name('dashboard.index');
+Route::get('/', 'DashboardController@index')->name('dashboard');

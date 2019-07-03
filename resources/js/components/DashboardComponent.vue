@@ -78,7 +78,7 @@
                 this.fetch();
         },
             fetch() {
-                axios.get(`/`, {
+                axios.get(`/api/v1/dashboard`, {
                     params: {
                         date: this.date,
                         os: this.os,

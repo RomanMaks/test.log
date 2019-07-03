@@ -17,4 +17,4 @@ use Illuminate\Http\Request;
 //    return $request->user();
 //});
 
-Route::get('/v1/dashboard', 'Api\V1\DashboardController');
+Route::get('/v1/dashboard', 'Api\V1\DashboardController')->name('dashboard');

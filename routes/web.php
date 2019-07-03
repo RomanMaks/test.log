@@ -11,4 +11,4 @@
 |
 */
 
-Route::get('/', 'HomeController@index')->name('dashboard');
+Route::get('/', 'HomeController@index')->name('home');

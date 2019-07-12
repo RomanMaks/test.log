@@ -17,4 +17,7 @@ use Illuminate\Http\Request;
 //    return $request->user();
 //});
 
-Route::get('/v1/dashboard', 'Api\V1\DashboardController')->name('dashboard');
+Route::prefix('/v1/dashboard')->namespace('Api\V1\Dashboard')->group(function () {
+    Route::get('/table', 'TableController')->name('table');
+    Route::get('/chart-bar', 'ChartBarController')->name('chart-bar');
+});

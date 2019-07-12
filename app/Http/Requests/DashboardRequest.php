@@ -4,6 +4,12 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Валидация данных прищедших в запросе
+ *
+ * Class DashboardRequest
+ * @package App\Http\Requests
+ */
 class DashboardRequest extends FormRequest
 {
     /**

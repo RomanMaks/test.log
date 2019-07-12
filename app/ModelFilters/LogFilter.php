@@ -4,6 +4,12 @@ namespace App\ModelFilters;
 
 use EloquentFilter\ModelFilter;
 
+/**
+ * Фильтр для таблицы и графика
+ *
+ * Class LogFilter
+ * @package App\ModelFilters
+ */
 class LogFilter extends ModelFilter
 {
     /**

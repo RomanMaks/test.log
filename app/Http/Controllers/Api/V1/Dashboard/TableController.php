@@ -1,16 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1;
+namespace App\Http\Controllers\Api\V1\Dashboard;
 
 use App\Http\Models\Log;
 use App\Http\Requests\DashboardRequest;
 use Illuminate\Routing\Controller;
 
 /**
- * Class DashboardController
- * @package App\Http\Controllers\Api\V1
+ * Контроллер отдает данные для заполнения таблицы
+ *
+ * Class TableController
+ * @package App\Http\Controllers\Api\V1\Dashboard
  */
-class DashboardController extends Controller
+class TableController extends Controller
 {
     public function __invoke(DashboardRequest $request)
     {

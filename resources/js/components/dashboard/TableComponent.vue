@@ -60,7 +60,7 @@
 
 <script>
     export default {
-        name: "DashboardComponent",
+        name: "TableComponent",
         data() {
             return {
                 date: null,
@@ -78,7 +78,7 @@
                 this.fetch();
         },
             fetch() {
-                axios.get(`/api/v1/dashboard`, {
+                axios.get(`/api/v1/dashboard/table`, {
                     params: {
                         date: this.date,
                         os: this.os,

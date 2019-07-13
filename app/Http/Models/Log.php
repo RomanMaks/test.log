@@ -88,4 +88,27 @@ class Log extends Model
                     ->orderByDesc('count');
             }, 'popular');
     }
+
+    /**
+     * Запросов в день
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeRequestsPerDay(Builder $query): Builder
+    {
+        return $query
+            ->fromSub(function (QueryBuilder $query) {
+                return $query->from($this->table)
+                    ->select([
+                        DB::raw('DATE(`requested_at`) AS date'),
+                        DB::raw('COUNT(*) AS count'),
+                        'os',
+                        'architecture'
+                    ])
+                    ->groupBy(['date', 'os', 'architecture'])
+                    ->orderByDesc('count');
+            }, 'popular')
+            ->select(['date', 'count']);
+    }
 }

@@ -1,5 +1,14 @@
 <template>
     <div>
+        <div class="row">
+            <div class="col-sm-6">
+                <chart-bar
+                        :chart-data="requestsPerDay"
+                        :heigth="50"
+                        :options="{responsive: true, maintainAspectRatio: true}">
+                </chart-bar>
+            </div>
+        </div>
         <div class="alert alert-dark collapse show" role="alert" id="collapseExample">
             <form>
                 <div class="form-row">
@@ -59,13 +68,19 @@
 </template>
 
 <script>
+    import ChartBar from './ChartBar.js'
+
     export default {
-        name: "TableComponent",
+        name: "DashboardComponent",
+        components: {
+            ChartBar
+        },
         data() {
             return {
                 date: null,
                 os: null,
                 architecture: null,
+                requestsPerDay: [],
                 logs: [],
                 listOs: [],
             }
@@ -75,8 +90,9 @@
                 this.date = null;
                 this.os = null;
                 this.architecture = null;
+                this.requestsPerDay = null;
                 this.fetch();
-        },
+            },
             fetch() {
                 axios.get(`/api/v1/dashboard/table`, {
                     params: {
@@ -87,8 +103,21 @@
                 }).then(response => {
                     this.logs = response.data.logs;
                     this.listOs = response.data.os;
+                });
+
+                this.updateChart();
+            },
+            updateChart() {
+                axios.get(`/api/v1/dashboard/chart-bar`, {
+                    params: {
+                        date: this.date,
+                        os: this.os,
+                        architecture: this.architecture,
+                    }
+                }).then(response => {
+                    this.requestsPerDay = response.data;
                 })
-            }
+            },
         },
         mounted() {
             this.fetch();

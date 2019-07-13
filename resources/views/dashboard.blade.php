@@ -4,8 +4,8 @@
 
 @section('content')
 
-    @include('dashboard.components.table')
-
-    @include('dashboard.components.chart-bar')
+    <div class="container">
+        <dashboard></dashboard>
+    </div>
 
 @endsection

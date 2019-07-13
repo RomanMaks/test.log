@@ -17,13 +17,29 @@ class ChartBarController extends Controller
 {
     public function __invoke(DashboardRequest $request)
     {
-        $logs = Log::filter($request->all())
-            ->popular()->get();
+        $requestsPerDay = Log::filter($request->all())
+            ->requestsPerDay()
+            ->get();
 
-//        dd($logs);
+        $chart = [];
+
+        foreach ($requestsPerDay as $item) {
+            if (!isset($chart[$item['date']])) {
+                $chart[$item['date']] = $item['count'];
+            } else {
+                $chart[$item['date']] += $item['count'];
+            }
+        }
 
         return response()->json([
-            'chart' => $logs->toArray()
+            'labels' => array_keys($chart),
+            'datasets' => [
+                [
+                    'label' => 'Число запросов',
+                    'background' => '#F26202',
+                    'data' => array_values($chart)
+                ]
+            ]
         ]);
     }
 }

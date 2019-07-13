@@ -19,8 +19,7 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component('dashboard-table', require('./components/dashboard/TableComponent.vue').default);
-Vue.component('dashboard-chart-bar', require('./components/dashboard/ChartBarComponent.vue').default);
+Vue.component('dashboard', require('./components/DashboardComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

@@ -20,4 +20,5 @@ use Illuminate\Http\Request;
 Route::prefix('/v1/dashboard')->namespace('Api\V1\Dashboard')->group(function () {
     Route::get('/table', 'TableController')->name('table');
     Route::get('/chart-bar', 'ChartBarController')->name('chart-bar');
+    Route::get('/chart-bar-stacked', 'ChartBarStackedController')->name('chart-bar-stacked');
 });

@@ -1,6 +1,7 @@
 ip: 192.168.10.10
 memory: 2048
 cpus: 2
+mysql8: true
 provider: virtualbox
 
 authorize: ~/.ssh/id_rsa.pub

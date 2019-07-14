@@ -1908,6 +1908,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "DashboardComponent",
@@ -1945,9 +1952,9 @@ __webpack_require__.r(__webpack_exports__);
         _this.logs = response.data.logs;
         _this.listOs = response.data.os;
       });
-      this.updateChart();
+      this.updateChartBar();
     },
-    updateChart: function updateChart() {
+    updateChartBar: function updateChartBar() {
       var _this2 = this;
 
       axios.get("/api/v1/dashboard/chart-bar", {
@@ -1958,6 +1965,19 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).then(function (response) {
         _this2.requestsPerDay = response.data;
+      });
+    },
+    updateChartBarStacked: function updateChartBarStacked() {
+      var _this3 = this;
+
+      axios.get("/api/v1/dashboard/chart-bar-stacked", {
+        params: {
+          date: this.date,
+          os: this.os,
+          architecture: this.architecture
+        }
+      }).then(function (response) {
+        _this3.requestsPerDay = response.data;
       });
     }
   },
@@ -69843,6 +69863,21 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("div", { staticClass: "row" }, [
+      _c(
+        "div",
+        { staticClass: "col-sm-6" },
+        [
+          _c("chart-bar", {
+            attrs: {
+              "chart-data": _vm.requestsPerDay,
+              heigth: 50,
+              options: { responsive: true, maintainAspectRatio: true }
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
       _c(
         "div",
         { staticClass: "col-sm-6" },

@@ -3,7 +3,14 @@
         <div class="row">
             <div class="col-sm-6">
                 <chart-bar
-                        :chart-data="requestsPerDay"
+                        :chart-data="dataBar"
+                        :heigth="50"
+                        :options="{responsive: true, maintainAspectRatio: true}">
+                </chart-bar>
+            </div>
+            <div class="col-sm-6">
+                <chart-bar
+                        :chart-data="dataBar"
                         :heigth="50"
                         :options="{responsive: true, maintainAspectRatio: true}">
                 </chart-bar>
@@ -70,6 +77,55 @@
 <script>
     import ChartBar from './ChartBar.js'
 
+    const horizonalLinePlugin = {
+        id: 'horizontalLine',
+        afterDraw: function(chartInstance) {
+
+            var yValue;
+            var yScale = chartInstance.scales["y-axis-0"];
+            var canvas = chartInstance.chart;
+            var ctx = canvas.ctx;
+            var index;
+            var line;
+            var style;
+
+            if (chartInstance.options.horizontalLine) {
+
+                for (index = 0; index < chartInstance.options.horizontalLine.length; index++) {
+                    line = chartInstance.options.horizontalLine[index];
+
+                    if (!line.style) {
+                        style = "#080808";
+                    } else {
+                        style = line.style;
+                    }
+
+                    if (line.y) {
+                        yValue = yScale.getPixelForValue(line.y);
+                    } else {
+                        yValue = 0;
+                    }
+                    ctx.lineWidth = 3;
+
+                    if (yValue) {
+                        window.chart = chartInstance;
+                        ctx.beginPath();
+                        ctx.moveTo(0, yValue);
+                        ctx.lineTo(canvas.width, yValue);
+                        ctx.strokeStyle = style;
+                        ctx.stroke();
+                    }
+
+                    if (line.text) {
+                        ctx.fillStyle = style;
+                        ctx.fillText(line.text, 0, yValue + ctx.lineWidth);
+                    }
+                }
+                return;
+            }
+        }
+    };
+
     export default {
         name: "DashboardComponent",
         components: {
@@ -80,7 +136,8 @@
                 date: null,
                 os: null,
                 architecture: null,
-                requestsPerDay: [],
+                dataBar: [],
+                dataBarStacked: [],
                 logs: [],
                 listOs: [],
             }
@@ -105,9 +162,9 @@
                     this.listOs = response.data.os;
                 });
 
-                this.updateChart();
+                this.updateChartBar();
             },
-            updateChart() {
+            updateChartBar() {
                 axios.get(`/api/v1/dashboard/chart-bar`, {
                     params: {
                         date: this.date,
@@ -115,7 +172,18 @@
                         architecture: this.architecture,
                     }
                 }).then(response => {
-                    this.requestsPerDay = response.data;
+                    this.dataBar = response.data;
+                })
+            },
+            updateChartBarStacked() {
+                axios.get(`/api/v1/dashboard/chart-bar-stacked`, {
+                    params: {
+                        date: this.date,
+                        os: this.os,
+                        architecture: this.architecture,
+                    }
+                }).then(response => {
+                    this.dataBarStacked = response.data;
                 })
             },
         },

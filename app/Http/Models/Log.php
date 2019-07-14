@@ -111,4 +111,35 @@ class Log extends Model
             }, 'popular')
             ->select(['date', 'count']);
     }
+
+    /**
+     * Запросов в день для каждого браузера
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeRequestsFromBrowser(Builder $query): Builder
+    {
+        return $query
+            ->fromSub(function (QueryBuilder $query) {
+                return $query->from($this->table)
+                    ->select([
+                        DB::raw('DATE(`requested_at`) AS date'),
+                        'browser',
+                        'os',
+                        'architecture',
+                        DB::raw('COUNT(*) AS count')
+                    ])
+                    ->groupBy(['date', 'browser', 'os', 'architecture'])
+                    ->orderByDesc('count');
+            }, 'popular')
+            ->select([
+                'date',
+                'browser',
+                'os',
+                'architecture',
+                DB::raw('((count * 100) / SUM(count) OVER (PARTITION BY date)) AS share_of'),
+                DB::raw('(row_number() OVER (PARTITION BY date)) AS row_num')
+            ]);
+    }
 }

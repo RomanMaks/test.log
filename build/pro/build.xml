@@ -83,6 +83,6 @@
     <!-- ============================================  -->
     <target name="migrate">
         <echo msg="Db migrating:" />
-        <exec command="php artisan migrate &#45;&#45;database=default" dir="${current.dir}" passthru="true" checkreturn="true" />
+        <exec command="php artisan migrate" dir="${current.dir}" passthru="true" checkreturn="true" />
     </target>
 </project>

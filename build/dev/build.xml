@@ -2,8 +2,7 @@
 
 <project name="Test" default="build" basedir=".">
 
-    <!--<target name="build" depends="vars, configs, composer, migrate"/>-->
-    <target name="build" depends="vars, configs, composer"/>
+    <target name="build" depends="vars, configs, composer, migrate"/>
 
     <!-- ============================================  -->
     <!-- Target: vars                                  -->
@@ -38,9 +37,9 @@
     <!-- ============================================  -->
     <!-- Target: migrate                               -->
     <!-- ============================================  -->
-    <!--<target name="migrate">-->
-        <!--<echo msg="Db migrating:" />-->
-        <!--<exec command="php artisan migrate &#45;&#45;database=default" dir="${project.dir}" passthru="true" checkreturn="true" />-->
-    <!--</target>-->
+    <target name="migrate">
+        <echo msg="Db migrating:" />
+        <exec command="php artisan migrate" dir="${project.dir}" passthru="true" checkreturn="true" />
+    </target>
 
 </project>

@@ -13,8 +13,10 @@
 
 ## Настройки локального окружения
 
-Поднимите виртуальную машину командой `vagrant up --provision`
-- Зайдите в ВМ `vagrant ssh`, перейдите в папку `~/code`
-- Соберите приложение командой `php vendor/phing/phing/bin/phing -f ./build/dev/build.xml`
+1. Выполнить команду `composer install`
+2. В файле `Homestead.yaml` заменить `folders: - map: /home/workman04/work/TEST/test.log` на свой путь к каталогу `test.log` 
+3. Поднимите виртуальную машину командой `vagrant up --provision`
+4. Зайдите в ВМ `vagrant ssh`, перейдите в папку `~/code`
+5. Соберите приложение командой `php vendor/phing/phing/bin/phing -f ./build/dev/build.xml`
 
 - Заходите на http://dev.log.local/
